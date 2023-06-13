@@ -67,7 +67,7 @@ test "decode literals" {
 
 const DecodeError = error{NoTermination};
 
-pub fn decode(buffer: []const VarintByte) !u64 {
+pub fn decode(buffer: []const VarintByte) DecodeError!u64 {
     var i: usize = inline for (buffer, 0..10) |item, j| {
         if (!item.has_more and (j < 9 or item.value <= 1)) {
             break j;
