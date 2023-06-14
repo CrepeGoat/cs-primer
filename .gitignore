@@ -5,3 +5,14 @@
 *.sublime-workspace
 
 assets/*
+
+# Zig
+zig-cache
+zig-out
+build
+dist
+*.so
+
+# Python
+venv
+*.egg-info
