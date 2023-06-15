@@ -13,11 +13,11 @@ const py = @cImport({
 fn cvarint_encode(
     self: [*c]py.PyObject,
     args: [*c]py.PyObject,
-) callconv(.C) [*]py.PyObject {
+) callconv(.C) ?[*]py.PyObject {
     _ = self;
 
     var cvalue_K: CUInt = undefined;
-    if (!py.PyArg_ParseTuple(args, "K", &cvalue_K)) return null;
+    if (py.PyArg_ParseTuple(args, "K", &cvalue_K) == 0) return null;
     if (!canIntCast(u64, cvalue_K)) return null;
     const value = @intCast(u64, cvalue_K);
 
@@ -28,23 +28,23 @@ fn cvarint_encode(
     return py.Py_BuildValue(
         "y#",
         @ptrCast([*c]u8, result_vbytes.ptr),
-        @as(py.Py_ssize_t, result_vbytes.len),
+        @intCast(py.Py_ssize_t, result_vbytes.len),
     );
 }
 
 fn cvarint_decode(
     self: [*c]py.PyObject,
     args: [*c]py.PyObject,
-) callconv(.C) [*]py.PyObject {
+) callconv(.C) ?[*]py.PyObject {
     _ = self;
 
     var cvalue_ptr: [*c]u8 = undefined;
     var cvalue_len: py.Py_ssize_t = undefined;
-    if (!py.PyArg_ParseTuple(args, "K", &cvalue_ptr, &cvalue_len)) return null;
-    if (!cvalue_ptr) return null;
-    const value = @ptrCast([]const varint.VarintByte, cvalue_ptr[0..cvalue_len]);
+    if (py.PyArg_ParseTuple(args, "y#", &cvalue_ptr, &cvalue_len) == 0) return null;
+    if (cvalue_ptr == null) return null;
+    const value = @ptrCast([]const varint.VarintByte, cvalue_ptr[0..@intCast(usize, cvalue_len)]);
 
-    const result = varint.decode(value) orelse return null;
+    const result = varint.decode(value) catch return null;
     return py.Py_BuildValue("K", @as(CUInt, result));
 }
 
@@ -56,7 +56,7 @@ comptime {
 
 /// Runtime check that an int value fits in another int type.
 fn canIntCast(comptime T: type, value: anytype) bool {
-    return @truncate(@TypeOf(value), @truncate(T, value)) != value;
+    return @truncate(@TypeOf(value), @truncate(T, value)) == value;
 }
 
 var CVarintMethods = [_]py.PyMethodDef{

@@ -1,2 +1,7 @@
 zig-cache
 zig-out
+venv
+build
+dist
+*.egg-info
+*.so
