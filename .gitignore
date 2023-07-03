@@ -1,10 +1,11 @@
-# Specify filepatterns you want git to ignore.
+.pijul/
+.ignore
 
 .DS_Store
 
 *.sublime-workspace
 
-assets/*
+assets
 
 # Zig
 zig-cache
