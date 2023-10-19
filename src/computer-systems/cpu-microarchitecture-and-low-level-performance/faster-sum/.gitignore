@@ -1,1 +1,3 @@
+*.o
 benchmark.cc
+bench
