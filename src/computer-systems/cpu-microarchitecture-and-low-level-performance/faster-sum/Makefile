@@ -16,3 +16,6 @@ bench: benchmark.cc sum.o
 
 sum.o: sum.c
 	$(CC) -O1 -c sum.c
+
+clean:
+	rm bench *.o
