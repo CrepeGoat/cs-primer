@@ -15,7 +15,7 @@ bench: benchmark.cc sum.o
 	$(CXX) sum.o benchmark.cc -std=c++11 -lbenchmark -lpthread -o bench
 
 sum.o: sum.c
-	$(CC) -O1 -c sum.c
+	zig build-obj -O Debug sum.zig
 
 clean:
 	rm bench *.o
