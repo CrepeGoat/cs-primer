@@ -2,6 +2,7 @@
 
 pkgs.mkShell {
   buildInputs = [
+    pkgs.binutils
     (import ./google_benchmark.nix { inherit pkgs; })
   ];
   shellHook = ''
