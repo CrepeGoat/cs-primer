@@ -1,0 +1,4 @@
+*.bmp
+*.o
+benchmark.cc
+bench
