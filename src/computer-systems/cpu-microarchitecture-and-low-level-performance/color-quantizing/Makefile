@@ -17,8 +17,8 @@ convert: convert.o quantize.o
 bench: benchmark.cc quantize.o
 	$(CXX) quantize.o benchmark.cc -std=c++11 -lbenchmark -lpthread -o bench
 
-quantize.o: quantize.c
-	$(CC) -O1 -c quantize.c
+quantize.o: quantize.zig
+	zig build-obj -O Debug quantize.zig
 
 convert.o: convert.c
 	$(CC) -O1 -c convert.c
