@@ -6,6 +6,9 @@
 # to g++
 
 
+CC := zig cc
+CXX := zig c++
+
 .PHONY: run_bench clean
 	
 run_bench: bench
